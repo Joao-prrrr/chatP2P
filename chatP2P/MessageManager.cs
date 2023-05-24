@@ -14,12 +14,12 @@ namespace chatP2P
 {
     static class MessageManager
     {
-        static private string IP_ADDRESS = "10.5.43.52";
+        static private string IP_ADDRESS = "10.5.53.39";
         static private int PORT = 13;
         static private IPEndPoint ipEndPoint = new(IPAddress.Parse(IP_ADDRESS), PORT);
         static private TcpClient client = null;
 
-        static async void Connect()
+        public static async void Connect()
         {
 
             //var ipEndPoint = new IPEndPoint(ipAddress, 13);
@@ -38,23 +38,29 @@ namespace chatP2P
                     {
                         rep = false;
                     }
-
                 }
             }
         }
-        static public async void SendMessage(string message)
+        public static async void SendMessage(string message)
         {
-            
+            while (true)
+            {
+                try
+                {
+                    await using NetworkStream stream = client.GetStream();
 
-            await using NetworkStream stream = client.GetStream();
-
-            var buffer = Encoding.UTF8.GetBytes(message);
-            await stream.WriteAsync(buffer);
-
-            
+                    var buffer = Encoding.UTF8.GetBytes(message);
+                    await stream.WriteAsync(buffer);
+                    break;
+                }
+                catch
+                {
+                    // no need to code here
+                }
+            }
         }
 
-        static async Task<string> receiveMsg()
+        public static async Task<string> receiveMsg()
         {
             while (true)
             {

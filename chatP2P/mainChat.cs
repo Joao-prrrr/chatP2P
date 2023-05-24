@@ -9,7 +9,8 @@ namespace chatP2P
         public mainChat()
         {
             InitializeComponent();
-            MessageManager.SendMessage();
+            MessageManager.Connect();
+            MessageManager.SendMessage("Bakau Ballin' Three big dick ass niggers");
         }
     }
 }
