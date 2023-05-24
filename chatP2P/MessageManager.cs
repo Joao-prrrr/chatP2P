@@ -10,40 +10,44 @@ namespace chatP2P
 {
     static class MessageManager
     {
-        static async void SendMessage()
-        {
-            //IPHostEntry ipHostInfo = await Dns.GetHostEntryAsync("10.5.43.52");
-            //IPAddress ipAddress = ipHostInfo.AddressList[0];
+        static private string IP_ADDRESS = "10.5.43.52";
+        static private int PORT = 13;
+        static private IPEndPoint ipEndPoint = new(IPAddress.Parse(IP_ADDRESS), PORT);
+        static private TcpClient client = null;
 
-            IPEndPoint ipEndPoint = new(IPAddress.Parse("10.5.43.52"), 13);
+        static async void Connect()
+        {
 
             //var ipEndPoint = new IPEndPoint(ipAddress, 13);
-
-            using TcpClient client = new();
-            bool rep = false;
-            while (!rep)
+            if(client == null)
             {
-                try
+                client = new();
+                bool rep = false;
+                while (!rep)
                 {
-                    await client.ConnectAsync(ipEndPoint);
-                    rep = true;
-                }
-                catch (Exception ex)
-                {
-                    rep = false;
-                }
+                    try
+                    {
+                        await client.ConnectAsync(ipEndPoint);
+                        rep = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        rep = false;
+                    }
 
+                }
             }
+        }
+        static public async void SendMessage(string message)
+        {
+            
 
             await using NetworkStream stream = client.GetStream();
 
-            var buffer = Encoding.UTF8.GetBytes("Ta mere la choiun 2");
+            var buffer = Encoding.UTF8.GetBytes(message);
             await stream.WriteAsync(buffer);
 
-            //var message = Encoding.UTF8.GetString(buffer, 0, received);
-            //Console.WriteLine($"Ta mere -- Message received: \"{message}\"");
-            // Sample output:
-            //     Message received: "📅 8/22/2022 9:07:17 AM 🕛"
+            
         }
     }
 }
