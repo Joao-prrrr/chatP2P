@@ -9,7 +9,16 @@ namespace chatP2P
         public mainChat()
         {
             InitializeComponent();
-            MessageManager.SendMessage();
+
+            
+        }
+
+        private void mainChat_Shown(object sender, EventArgs e)
+        {
+            //MessageManager.Connect();
+            MessageManager.SendMessage("helo");
+
+            //label1.Text = message.Result;
         }
     }
 }
