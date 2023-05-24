@@ -36,7 +36,7 @@ namespace chatP2P
                 {
                     response = false;
                 }
-
+                Thread.Sleep(5000);
             }
 
             while (true)
