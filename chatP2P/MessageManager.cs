@@ -1,20 +1,16 @@
-﻿using System.Net;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
+using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace chatP2P
 {
-    public partial class mainChat : Form
+    static class MessageManager
     {
-        public mainChat()
-        {
-            InitializeComponent();
-            test();
-        }
-
-
-
-        async void test()
+        static async void SendMessage()
         {
             //IPHostEntry ipHostInfo = await Dns.GetHostEntryAsync("10.5.43.52");
             //IPAddress ipAddress = ipHostInfo.AddressList[0];
@@ -31,13 +27,14 @@ namespace chatP2P
                 {
                     await client.ConnectAsync(ipEndPoint);
                     rep = true;
-                }catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     rep = false;
                 }
 
             }
-            
+
             await using NetworkStream stream = client.GetStream();
 
             var buffer = Encoding.UTF8.GetBytes("Ta mere la choiun 2");
