@@ -8,19 +8,19 @@
     "net6.0-windows7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\Joao Araribá\\.nuget\\packages\\": {}
+    "C:\\Users\\Louis\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Joao Araribá\\Desktop\\CFPT-Informatique-2eme\\M114\\chatP2P\\chatP2P\\chatP2P.csproj",
+      "projectUniqueName": "C:\\Users\\Louis\\Desktop\\chatP2P\\chatP2P\\chatP2P.csproj",
       "projectName": "chatP2P",
-      "projectPath": "C:\\Users\\Joao Araribá\\Desktop\\CFPT-Informatique-2eme\\M114\\chatP2P\\chatP2P\\chatP2P.csproj",
-      "packagesPath": "C:\\Users\\Joao Araribá\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Joao Araribá\\Desktop\\CFPT-Informatique-2eme\\M114\\chatP2P\\chatP2P\\obj\\",
+      "projectPath": "C:\\Users\\Louis\\Desktop\\chatP2P\\chatP2P\\chatP2P.csproj",
+      "packagesPath": "C:\\Users\\Louis\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Louis\\Desktop\\chatP2P\\chatP2P\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Joao Araribá\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Louis\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -64,7 +64,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
       }
     }
   }
