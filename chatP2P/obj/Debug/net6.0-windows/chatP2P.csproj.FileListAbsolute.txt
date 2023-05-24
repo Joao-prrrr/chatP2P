@@ -1,0 +1,17 @@
+C:\Users\Joao Araribá\Desktop\CFPT-Informatique-2eme\M114\chatP2P\chatP2P\bin\Debug\net6.0-windows\chatP2P.exe
+C:\Users\Joao Araribá\Desktop\CFPT-Informatique-2eme\M114\chatP2P\chatP2P\bin\Debug\net6.0-windows\chatP2P.deps.json
+C:\Users\Joao Araribá\Desktop\CFPT-Informatique-2eme\M114\chatP2P\chatP2P\bin\Debug\net6.0-windows\chatP2P.runtimeconfig.json
+C:\Users\Joao Araribá\Desktop\CFPT-Informatique-2eme\M114\chatP2P\chatP2P\bin\Debug\net6.0-windows\chatP2P.dll
+C:\Users\Joao Araribá\Desktop\CFPT-Informatique-2eme\M114\chatP2P\chatP2P\bin\Debug\net6.0-windows\chatP2P.pdb
+C:\Users\Joao Araribá\Desktop\CFPT-Informatique-2eme\M114\chatP2P\chatP2P\obj\Debug\net6.0-windows\chatP2P.csproj.AssemblyReference.cache
+C:\Users\Joao Araribá\Desktop\CFPT-Informatique-2eme\M114\chatP2P\chatP2P\obj\Debug\net6.0-windows\chatP2P.mainChat.resources
+C:\Users\Joao Araribá\Desktop\CFPT-Informatique-2eme\M114\chatP2P\chatP2P\obj\Debug\net6.0-windows\chatP2P.csproj.GenerateResource.cache
+C:\Users\Joao Araribá\Desktop\CFPT-Informatique-2eme\M114\chatP2P\chatP2P\obj\Debug\net6.0-windows\chatP2P.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Joao Araribá\Desktop\CFPT-Informatique-2eme\M114\chatP2P\chatP2P\obj\Debug\net6.0-windows\chatP2P.AssemblyInfoInputs.cache
+C:\Users\Joao Araribá\Desktop\CFPT-Informatique-2eme\M114\chatP2P\chatP2P\obj\Debug\net6.0-windows\chatP2P.AssemblyInfo.cs
+C:\Users\Joao Araribá\Desktop\CFPT-Informatique-2eme\M114\chatP2P\chatP2P\obj\Debug\net6.0-windows\chatP2P.csproj.CoreCompileInputs.cache
+C:\Users\Joao Araribá\Desktop\CFPT-Informatique-2eme\M114\chatP2P\chatP2P\obj\Debug\net6.0-windows\chatP2P.dll
+C:\Users\Joao Araribá\Desktop\CFPT-Informatique-2eme\M114\chatP2P\chatP2P\obj\Debug\net6.0-windows\refint\chatP2P.dll
+C:\Users\Joao Araribá\Desktop\CFPT-Informatique-2eme\M114\chatP2P\chatP2P\obj\Debug\net6.0-windows\chatP2P.pdb
+C:\Users\Joao Araribá\Desktop\CFPT-Informatique-2eme\M114\chatP2P\chatP2P\obj\Debug\net6.0-windows\chatP2P.genruntimeconfig.cache
+C:\Users\Joao Araribá\Desktop\CFPT-Informatique-2eme\M114\chatP2P\chatP2P\obj\Debug\net6.0-windows\ref\chatP2P.dll
