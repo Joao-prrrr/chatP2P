@@ -17,55 +17,49 @@ namespace chatP2P
         static private string IP_ADDRESS = "10.5.53.39";
         static private int PORT = 13;
         static private IPEndPoint ipEndPoint = new(IPAddress.Parse(IP_ADDRESS), PORT);
-        static private TcpClient client = null;
 
-        public static async void Connect()
+        public static async void Connect(TcpClient client)
         {
-
-            //var ipEndPoint = new IPEndPoint(ipAddress, 13);
-            if(client == null)
+            bool rep = false;
+            while (!rep)
             {
-                client = new();
-                bool rep = false;
-                while (!rep)
+                try
                 {
-                    try
-                    {
-                        await client.ConnectAsync(ipEndPoint);
-                        rep = true;
-                    }
-                    catch (Exception ex)
-                    {
-                        rep = false;
-                    }
+                    await client.ConnectAsync(ipEndPoint);
+                    rep = true;
                 }
+                catch (Exception ex)
+                {
+                    rep = false;
+                }
+
             }
         }
-        public static async void SendMessage(string message)
+        static public async void SendMessage(string message)
         {
             while (true)
             {
                 try
                 {
+                    using TcpClient client = new();
+                    Connect(client);
+
                     await using NetworkStream stream = client.GetStream();
 
                     var buffer = Encoding.UTF8.GetBytes(message);
                     await stream.WriteAsync(buffer);
                     break;
                 }
-                catch
-                {
-                    // no need to code here
-                }
+                catch { }
             }
         }
 
-        public static async Task<string> receiveMsg()
+        static public async Task<string> ReceiveMsg()
         {
             while (true)
             {
-                var ipEndPoint = new IPEndPoint(IPAddress.Any, 13);
-                TcpListener listener = new(ipEndPoint);
+                var ipEndPointListener = new IPEndPoint(IPAddress.Any, PORT);
+                TcpListener listener = new(ipEndPointListener);
 
                 bool rep = false;
                 while (!rep)
