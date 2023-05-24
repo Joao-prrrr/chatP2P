@@ -14,55 +14,40 @@ namespace chatP2P
 
         async void test()
         {
-            //IPHostEntry ipHostInfo = await Dns.GetHostEntryAsync("10.5.43.52");
-            //IPAddress ipAddress = ipHostInfo.AddressList[0];
-
-            IPEndPoint ipEndPoint = new(IPAddress.Parse("10.5.43.52"), 11_000);
-
-            using Socket client = new(
-            ipEndPoint.AddressFamily,
-            SocketType.Stream,
-            ProtocolType.Tcp);
-
-            bool response = false;
-            while(!response)
-            {
-                try
-                {
-                    await client.ConnectAsync(ipEndPoint);
-                    response = true;
-                }
-                catch (Exception ex)
-                {
-                    response = false;
-                }
-                Thread.Sleep(5000);
-            }
-
             while (true)
             {
-                // Send message.
-                var message = "Hi friends 👋!<|EOM|>";
-                var messageBytes = Encoding.UTF8.GetBytes(message);
-                _ = await client.SendAsync(messageBytes, SocketFlags.None);
-                Console.WriteLine($"Socket client sent message: \"{message}\"");
+                var ipEndPoint = new IPEndPoint(IPAddress.Any, 13);
+                TcpListener listener = new(ipEndPoint);
 
-                /*// Receive ack.
-                var buffer = new byte[1_024];
-                var received = await client.ReceiveAsync(buffer, SocketFlags.None);
-                var response = Encoding.UTF8.GetString(buffer, 0, received);
-                if (response == "<|ACK|>")
+                bool rep = false;
+                while (!rep)
                 {
-                    Console.WriteLine(
-                        $"Socket client received acknowledgment: \"{response}\"");
-                    break;
-                }*/
-                // Sample output:
-                //     Socket client sent message: "Hi friends 👋!<|EOM|>"
-                //     Socket client received acknowledgment: "<|ACK|>"
-            }
+                    try
+                    {
+                        listener.Start();
 
-            client.Shutdown(SocketShutdown.Both);
+                        using TcpClient handler = await listener.AcceptTcpClientAsync();
+                        await using NetworkStream stream = handler.GetStream();
+
+                        //var message = $"📅 {DateTime.Now} 🕛";
+                        // var dateTimeBytes = Encoding.UTF8.GetBytes(message);
+                        // await stream.WriteAsync(dateTimeBytes);
+
+                        byte[] buffer = new byte[1024];
+
+                        var received = stream.Read(buffer);
+                        var message = Encoding.UTF8.GetString(buffer.AsSpan(0, received));
+                        label1.Text = message;
+                        // Sample output:
+                        //     Sent message: "📅 8/22/2022 9:07:17 AM 🕛"
+                        rep = true;
+                    }
+                    finally
+                    {
+                        listener.Stop();
+                    }
+                }
+            }
         }
     }
 }
