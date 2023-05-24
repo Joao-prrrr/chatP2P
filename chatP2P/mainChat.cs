@@ -13,10 +13,10 @@ namespace chatP2P
 
         private void mainChat_Shown(object sender, EventArgs e)
         {
-            //MessageManager.Connect();
-            MessageManager.SendMessage("Hello \r\n \r\n \r\n \r\n \r\n \r\n Nigga");
-
-            //label1.Text = message.Result;
+            // MessageManager.Connect();
+            // MessageManager.SendMessage("Hello \r\n \r\n \r\n \r\n \r\n \r\n Nigga");
+            var txt = MessageManager.ReceiveMsg();
+           label1.Text = txt.Result;
         }
     }
 }
