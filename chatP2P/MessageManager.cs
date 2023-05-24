@@ -12,12 +12,12 @@ using System.Windows.Forms;
 
 namespace chatP2P
 {
-    static class MessageManager
+    class MessageManager
     {
         static private string IP_ADDRESS = "10.5.43.52";
         static private int PORT = 13;
-
         static private IPEndPoint ipEndPoint = new(IPAddress.Parse(IP_ADDRESS), PORT);
+
 
         public static async void Connect(TcpClient client)
         {
@@ -38,13 +38,21 @@ namespace chatP2P
         }
         static public async void SendMessage(string message)
         {
-            using TcpClient client = new();
-            Connect(client);
+            while (true)
+            {
+                try
+                {
+                    using TcpClient client = new();
+                    Connect(client);
 
-            await using NetworkStream stream = client.GetStream();
+                    await using NetworkStream stream = client.GetStream();
 
-            var buffer = Encoding.UTF8.GetBytes(message);
-            await stream.WriteAsync(buffer);        
+                    var buffer = Encoding.UTF8.GetBytes(message);
+                    await stream.WriteAsync(buffer);
+                    break;
+                }
+                catch { }
+            }
         }
 
         static public async Task<string> ReceiveMsg()

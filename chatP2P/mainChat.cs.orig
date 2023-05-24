@@ -9,10 +9,18 @@ namespace chatP2P
         public mainChat()
         {
             InitializeComponent();
+        }
+
+        private void mainChat_Shown(object sender, EventArgs e)
+        {
+            //MessageManager.Connect();
 <<<<<<< HEAD
-            MessageManager.SendMessage();
+            MessageManager.SendMessage("ma bite");
 =======
->>>>>>> 9a25fe2dd7eecaf79a61892e7c68b8aeed4e8c44
+            MessageManager.SendMessage("Hello \r\n \r\n \r\n \r\n \r\n \r\n Nigga");
+>>>>>>> d723279b9f52a52a78c1683bf89bf01b41484278
+
+            //label1.Text = message.Result;
         }
     }
 }

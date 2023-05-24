@@ -14,11 +14,7 @@ namespace chatP2P
         private void mainChat_Shown(object sender, EventArgs e)
         {
             //MessageManager.Connect();
-<<<<<<< HEAD
-            MessageManager.SendMessage("ma bite");
-=======
             MessageManager.SendMessage("Hello \r\n \r\n \r\n \r\n \r\n \r\n Nigga");
->>>>>>> d723279b9f52a52a78c1683bf89bf01b41484278
 
             //label1.Text = message.Result;
         }
