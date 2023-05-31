@@ -24,13 +24,11 @@ namespace chatP2P
 
         private MessageManager()
         {
-            using (client = new())
-            {
-                Connect(client);
-            }
+            client = new TcpClient();
+            listener = new(new IPEndPoint(IPAddress.Any, PORT));
 
-            var ipEndPointListener = new IPEndPoint(IPAddress.Any, PORT);
-            listener = new(ipEndPointListener);
+            Connect();
+
         }
 
         public static MessageManager GetInstance()
@@ -42,9 +40,8 @@ namespace chatP2P
             return singleton;
         }
 
-        private async void Connect(TcpClient client)
+        private async void Connect()
         {
-            
             bool rep = false;
             while (!rep)
             {
@@ -55,7 +52,6 @@ namespace chatP2P
                 }
                 catch
                 {
-                    rep = false;
                 }
 
             }
