@@ -13,22 +13,14 @@ namespace chatP2P
 
         private async void mainChat_Shown(object sender, EventArgs e)
         {
-            //MessageManager.Connect();
             MessageManager instance = MessageManager.GetInstance();
+            instance.DefineAsListner();
+            await instance.Connect();
+
             //instance.SendMessage("ma bite");
             var msg = await instance.ReceiveMsg();
             label1.Text = msg;
-            /*instance.ReceiveMsg();*/
-
-            //label1.Text = message.Result;
-            // MessageManager.Connect();
-            // MessageManager.SendMessage("Hello \r\n \r\n \r\n \r\n \r\n \r\n Nigga");
-            //var txt = MessageManager.ReceiveMsg();
-           //label1.Text = txt.Result;
-            // MessageManager.Connect();
-            // MessageManager.SendMessage("Hello \r\n \r\n \r\n \r\n \r\n \r\n Nigga");
-            //var txt = MessageManager.ReceiveMsg();
-           //label1.Text = txt.Result;
+            
         }
     }
 }

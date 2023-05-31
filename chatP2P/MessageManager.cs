@@ -10,11 +10,15 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using System.Diagnostics;
+using encryptingArariba;
+using Microsoft.VisualBasic;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace chatP2P
 {
     class MessageManager
     {
+        const string MY_IP_ADRESSE = "10.5.53.39";
         static private string IP_ADDRESS = "10.5.43.52";
         static private int PORT = 13;
         static private IPEndPoint ipEndPoint = new(IPAddress.Parse(IP_ADDRESS), PORT);
@@ -22,6 +26,11 @@ namespace chatP2P
         static private MessageManager singleton = null;
         private TcpClient client = null;
         private TcpListener listener = null;
+
+        private bool isListner;
+
+        public void DefineAsListner() { isListner = true; }
+        public void DefineAsClient() { isListner = false; }
 
         private MessageManager()
         {
@@ -41,8 +50,17 @@ namespace chatP2P
             return singleton;
         }
 
-        private async void Connect()
+        private async Task<bool> ConnectAsListner()
+        { 
+        }
+        private async Task<bool> ConnectAsClient()
         {
+
+        }
+
+        public async Task<bool> Connect()
+        {
+            return isListner ? ConnectAsListner() : ConnectAsClient();
             bool rep = false;
             while (!rep)
             {
@@ -58,9 +76,34 @@ namespace chatP2P
             }
         }
 
+        private bool HandShake()
+        {
+            HandShake handInfo = (HandShake?) await Receive();
+
+            if (verifyIdentity(handInfo.ip))
+            {
+
+            }
+
+            // hand shake
+            HandShake handShake = new HandShake(MY_IP_ADRESSE, Encryptor.GenNonce, Encryptor.Key, false);
+            singleton.Send(handShake);
+            HandShake response = (HandShake?) await singleton.Receive();
+
+            if (response.ok_code)
+            {
+                Encryptor.Nonce = handShake.nonce;
+                Encryptor.Key = handShake.key;
+                return await ReceiveMessage();
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public async void SendMessage(string message)
         {
-
             while (true)
             {
                 try
@@ -68,7 +111,8 @@ namespace chatP2P
                     Debug.WriteLine("SendMessage {0}", message);
                     await using NetworkStream stream = client.GetStream();
 
-                    var buffer = Encoding.UTF8.GetBytes(message);
+                   // var buffer = Encryptor.EncryptString(message);
+                    var buffer = ObjectToByteArray(message);
                     await stream.WriteAsync(buffer);
                     break;
                 }
@@ -76,7 +120,11 @@ namespace chatP2P
             }
         }
 
-        public async Task<string> ReceiveMsg()
+        public async Task<string> GetMessage()
+        {
+            
+        }
+        public async Task<object> Receive()
         {
             while (true)
             {
@@ -85,6 +133,7 @@ namespace chatP2P
                 {
                     try
                     {
+
                         listener.Start();
 
                         using TcpClient handler = await listener.AcceptTcpClientAsync();
@@ -101,13 +150,80 @@ namespace chatP2P
                         // Sample output:
                         //     Sent message: "📅 8/22/2022 9:07:17 AM 🕛"
                         rep = true;
-                        return message;
+                        //return Encryptor.DecryptString(buffer.AsSpan(0, received).ToArray());
+                        return ByteArrayToObject(buffer.AsSpan(0, received).ToArray());
                     }
                     catch
                     {
                         listener.Stop();
                     }
                 }
+            }
+        }
+
+        public async Task<string> ReceiveMessage()
+        {
+            while (true)
+            {
+                bool rep = false;
+                while (!rep)
+                {
+                    try
+                    {
+
+                        listener.Start();
+
+                        using TcpClient handler = await listener.AcceptTcpClientAsync();
+                        await using NetworkStream stream = handler.GetStream();
+
+                        //var message = $"📅 {DateTime.Now} 🕛";
+                        // var dateTimeBytes = Encoding.UTF8.GetBytes(message);
+                        // await stream.WriteAsync(dateTimeBytes);
+
+                        byte[] buffer = new byte[1024];
+
+                        var received = stream.Read(buffer);
+                        var message = Encoding.UTF8.GetString(buffer.AsSpan(0, received));
+                        // Sample output:
+                        //     Sent message: "📅 8/22/2022 9:07:17 AM 🕛"
+                        rep = true;
+                        //return Encryptor.DecryptString(buffer.AsSpan(0, received).ToArray());
+                        return Encryptor.DecryptString(buffer.AsSpan(0, received).ToArray());
+                    }
+                    catch
+                    {
+                        listener.Stop();
+                    }
+                }
+            }
+        }
+
+        private bool verifyIdentity(string ip)
+        {
+            return ip == IP_ADDRESS;
+        }
+
+        // Convert an object to a byte array
+        public static byte[] ObjectToByteArray(Object obj)
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            using (var ms = new MemoryStream())
+            {
+                bf.Serialize(ms, obj);
+                return ms.ToArray();
+            }
+        }
+
+        // Convert a byte array to an Object
+        public static Object ByteArrayToObject(byte[] arrBytes)
+        {
+            using (var memStream = new MemoryStream())
+            {
+                var binForm = new BinaryFormatter();
+                memStream.Write(arrBytes, 0, arrBytes.Length);
+                memStream.Seek(0, SeekOrigin.Begin);
+                var obj = binForm.Deserialize(memStream);
+                return obj;
             }
         }
     }
