@@ -9,6 +9,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace chatP2P
 {
@@ -64,6 +65,7 @@ namespace chatP2P
             {
                 try
                 {
+                    Debug.WriteLine("SendMessage {0}", message);
                     await using NetworkStream stream = client.GetStream();
 
                     var buffer = Encoding.UTF8.GetBytes(message);

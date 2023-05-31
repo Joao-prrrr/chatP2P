@@ -11,12 +11,13 @@ namespace chatP2P
             InitializeComponent();
         }
 
-        private void mainChat_Shown(object sender, EventArgs e)
+        private async void mainChat_Shown(object sender, EventArgs e)
         {
             //MessageManager.Connect();
             MessageManager instance = MessageManager.GetInstance();
-            instance.SendMessage("ma bite");
-
+            //instance.SendMessage("ma bite");
+            var msg = await instance.ReceiveMsg();
+            label1.Text = msg;
             /*instance.ReceiveMsg();*/
 
             //label1.Text = message.Result;
