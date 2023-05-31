@@ -9,12 +9,14 @@ namespace chatP2P
         public mainChat()
         {
             InitializeComponent();
+
+            
         }
 
         private void mainChat_Shown(object sender, EventArgs e)
         {
             //MessageManager.Connect();
-            MessageManager.SendMessage("Hello \r\n \r\n \r\n \r\n \r\n \r\n Nigga");
+            MessageManager.SendMessage("ma bite");
 
             //label1.Text = message.Result;
         }

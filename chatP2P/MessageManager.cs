@@ -53,7 +53,7 @@ namespace chatP2P
                     await client.ConnectAsync(ipEndPoint);
                     rep = true;
                 }
-                catch (Exception ex)
+                catch
                 {
                     rep = false;
                 }
@@ -105,7 +105,7 @@ namespace chatP2P
                         rep = true;
                         return message;
                     }
-                    finally
+                    catch
                     {
                         listener.Stop();
                     }
