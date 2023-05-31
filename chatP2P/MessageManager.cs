@@ -58,7 +58,7 @@ namespace chatP2P
             }
         }
 
-        public async void SendMessage(string message)
+        public async Task SendMessage(string message)
         {
 
             while (true)
