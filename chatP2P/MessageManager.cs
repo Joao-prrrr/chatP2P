@@ -12,11 +12,12 @@ using System.Windows.Forms;
 
 namespace chatP2P
 {
-    static class MessageManager
+    class MessageManager
     {
-        static private string IP_ADDRESS = "10.5.53.39";
+        static private string IP_ADDRESS = "10.5.43.52";
         static private int PORT = 13;
         static private IPEndPoint ipEndPoint = new(IPAddress.Parse(IP_ADDRESS), PORT);
+
 
         public static async void Connect(TcpClient client)
         {
@@ -84,7 +85,7 @@ namespace chatP2P
                         rep = true;
                         return message;
                     }
-                    finally
+                    catch
                     {
                         listener.Stop();
                     }
