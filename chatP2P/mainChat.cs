@@ -16,7 +16,8 @@ namespace chatP2P
         private void mainChat_Shown(object sender, EventArgs e)
         {
             //MessageManager.Connect();
-            MessageManager.SendMessage("ma bite");
+            MessageManager instance = MessageManager.GetInstance();
+            instance.SendMessage("ma bite");
 
             //label1.Text = message.Result;
         }

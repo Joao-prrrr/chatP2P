@@ -18,9 +18,33 @@ namespace chatP2P
         static private int PORT = 13;
         static private IPEndPoint ipEndPoint = new(IPAddress.Parse(IP_ADDRESS), PORT);
 
+        static private MessageManager singleton = null;
+        private TcpClient client = null;
+        private TcpListener listener = null;
 
-        public static async void Connect(TcpClient client)
+        private MessageManager()
         {
+            using (client = new())
+            {
+                Connect(client);
+            }
+
+            var ipEndPointListener = new IPEndPoint(IPAddress.Any, PORT);
+            listener = new(ipEndPointListener);
+        }
+
+        public static MessageManager GetInstance()
+        {
+            if(singleton == null)
+            {
+                singleton = new MessageManager();
+            }
+            return singleton;
+        }
+
+        private async void Connect(TcpClient client)
+        {
+            
             bool rep = false;
             while (!rep)
             {
@@ -36,15 +60,14 @@ namespace chatP2P
 
             }
         }
-        static public async void SendMessage(string message)
+
+        public async void SendMessage(string message)
         {
+
             while (true)
             {
                 try
                 {
-                    using TcpClient client = new();
-                    Connect(client);
-
                     await using NetworkStream stream = client.GetStream();
 
                     var buffer = Encoding.UTF8.GetBytes(message);
@@ -55,13 +78,10 @@ namespace chatP2P
             }
         }
 
-        static public async Task<string> ReceiveMsg()
+        public async Task<string> ReceiveMsg()
         {
             while (true)
             {
-                var ipEndPointListener = new IPEndPoint(IPAddress.Any, PORT);
-                TcpListener listener = new(ipEndPointListener);
-
                 bool rep = false;
                 while (!rep)
                 {
