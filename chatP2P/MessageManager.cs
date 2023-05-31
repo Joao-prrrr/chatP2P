@@ -110,5 +110,18 @@ namespace chatP2P
                 }
             }
         }
+
+        public async Task<bool> verifConnection()
+        {
+            try
+            {
+                await client.ConnectAsync(ipEndPoint);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

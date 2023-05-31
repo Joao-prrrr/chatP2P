@@ -31,6 +31,7 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.btnSend = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.lblConnect = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // textBox1
@@ -54,18 +55,29 @@
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(12, 12);
+            this.richTextBox1.Location = new System.Drawing.Point(12, 32);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.richTextBox1.Size = new System.Drawing.Size(964, 493);
+            this.richTextBox1.Size = new System.Drawing.Size(964, 473);
             this.richTextBox1.TabIndex = 2;
             this.richTextBox1.Text = "";
+            // 
+            // lblConnect
+            // 
+            this.lblConnect.AutoSize = true;
+            this.lblConnect.Font = new System.Drawing.Font("Arial Narrow", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblConnect.ForeColor = System.Drawing.Color.Black;
+            this.lblConnect.Location = new System.Drawing.Point(12, 9);
+            this.lblConnect.Name = "lblConnect";
+            this.lblConnect.Size = new System.Drawing.Size(0, 20);
+            this.lblConnect.TabIndex = 3;
             // 
             // mainChat
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(988, 546);
+            this.Controls.Add(this.lblConnect);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.textBox1);
@@ -82,5 +94,6 @@
         private TextBox textBox1;
         private Button btnSend;
         private RichTextBox richTextBox1;
+        private Label lblConnect;
     }
 }

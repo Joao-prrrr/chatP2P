@@ -4,6 +4,8 @@ using System.Net.Sockets;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace chatP2P
 {
@@ -24,12 +26,33 @@ namespace chatP2P
 
         private async void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            var msg = await instance.ReceiveMsg();
+            if (instance.verifConnection().Result)
+            {
+                lblConnect.ForeColor = Color.Green;
+                string txt = "Connected";
+                lblConnect.Invoke((MethodInvoker)delegate {
+                    lblConnect.Text = txt;
+                });
 
-            Font font = new Font("Arial", 9, FontStyle.Bold);
-            richTextBox1.SelectionFont = font;
-            richTextBox1.SelectionColor = Color.Red;
-            richTextBox1.SelectedText = Environment.NewLine + "Other :  " + textBox1.Text;
+                var msg = await instance.ReceiveMsg();
+
+                Font msgFont = new Font("Arial", 9, FontStyle.Bold);
+                richTextBox1.SelectionFont = msgFont;
+                richTextBox1.SelectionColor = Color.Red;
+                richTextBox1.SelectedText = Environment.NewLine + "Other :  " + textBox1.Text;
+
+                btnSend.Enabled = true;
+            }
+            else
+            {
+                lblConnect.ForeColor = Color.Red;
+                string txt = "Disonnected - Unable to communicate with";
+                lblConnect.Invoke((MethodInvoker)delegate {
+                    lblConnect.Text = txt;
+                });
+
+                btnSend.Enabled = false;
+            }
         }
 
         private async void mainChat_Shown(object sender, EventArgs e)
@@ -49,8 +72,7 @@ namespace chatP2P
 
             textBox1.Text = "";
 
-            /*
-            instance.SendMessage(textBox1.Text);*/
+            /*instance.SendMessage(textBox1.Text);*/
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
