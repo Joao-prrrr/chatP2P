@@ -74,7 +74,7 @@ namespace chatP2P
                 try
                 {
                     HandShake handShake = new HandShake(MY_IP_ADRESSE, Encryptor.GenNonce, Encryptor.Key, false);
-                    await singleton.SendMessage("hello");
+                    singleton.SendMessage("hello");
                     var resp = await singleton.ReceiveMessage();
                     Debug.WriteLine(resp);
                     return true;
