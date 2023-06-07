@@ -64,8 +64,9 @@ namespace chatP2P
                     client = await listener.AcceptTcpClientAsync();
                     Debug.WriteLine(client);
                     await using NetworkStream stream = client.GetStream();
-                    Debug.WriteLine(stream);
-                    return true;
+                    bool done = await singleton.HandShake();
+                    Debug.WriteLine(done);
+                    return done;
                 }
                 catch(Exception ex)
                 {

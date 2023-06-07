@@ -117,6 +117,7 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "mainChat";
             Text = "Chat P2P";
+            Shown += mainChat_Shown;
             ResumeLayout(false);
             PerformLayout();
         }
