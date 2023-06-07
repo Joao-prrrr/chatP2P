@@ -76,6 +76,7 @@ namespace chatP2P
             }
         }
 
+<<<<<<< HEAD
         private bool HandShake()
         {
             HandShake handInfo = (HandShake?) await Receive();
@@ -103,6 +104,9 @@ namespace chatP2P
         }
 
         public async void SendMessage(string message)
+=======
+        public async Task SendMessage(string message)
+>>>>>>> 83a14b5d4d49d868f9b476187c389fa58415b60a
         {
             while (true)
             {
@@ -161,6 +165,7 @@ namespace chatP2P
             }
         }
 
+<<<<<<< HEAD
         public async Task<string> ReceiveMessage()
         {
             while (true)
@@ -224,6 +229,18 @@ namespace chatP2P
                 memStream.Seek(0, SeekOrigin.Begin);
                 var obj = binForm.Deserialize(memStream);
                 return obj;
+=======
+        public async Task<bool> verifConnection()
+        {
+            try
+            {
+                await client.ConnectAsync(ipEndPoint);
+                return true;
+            }
+            catch
+            {
+                return false;
+>>>>>>> 83a14b5d4d49d868f9b476187c389fa58415b60a
             }
         }
     }
