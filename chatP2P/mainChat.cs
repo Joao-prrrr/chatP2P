@@ -81,6 +81,13 @@ namespace chatP2P
             {
                 connected = await instance.Connect();
             }
+            bool bRetvalue = await instance.HandShake();
+            if (bRetvalue == false)
+            {
+                // Error
+            }
+            // Nickel
+
             /*//MessageManager.Connect();
             MessageManager instance = MessageManager.GetInstance();
             //instance.SendMessage("ma bite");

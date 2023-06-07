@@ -19,6 +19,8 @@ namespace chatP2P
 {
     class MessageManager
     {
+        const int HANDSHAKECOUNT = 3;
+
         const string MY_IP_ADRESSE = "10.5.53.39";
         static private string IP_ADDRESS = "10.5.43.52";
         static private int PORT = 13;
@@ -26,7 +28,7 @@ namespace chatP2P
         static private MessageManager singleton = null;
         private TcpClient client = null;
         private TcpListener listener = null;
-
+        private int currentStep;
         private bool isListner;
 
         public void DefineAsListner() { isListner = true; }
@@ -35,7 +37,7 @@ namespace chatP2P
         private MessageManager()
         {
             listener = new(new IPEndPoint(IPAddress.Any, PORT));
-
+            currentStep = 0;
             /*Connect();*/
 
         }
@@ -96,65 +98,89 @@ namespace chatP2P
             return isListner ? await ConnectAsListner() : await ConnectAsClient(ipEndPoint);
         }
 
-        async private Task<bool> HandShake()
+        async public Task<bool> HandShake()
         {
-            if(isListner)
-            {
-                try
-                {
-                    HandShake handShake = new HandShake(MY_IP_ADRESSE, Encryptor.GenNonce, Encryptor.Key, false);
-                    await singleton.SendMessage("hello");
-                    
-                    var resp = await singleton.ReceiveMessage();
-                    Debug.WriteLine(resp);
-                    return true;
-                }catch(Exception ex)
-                {
-                    Debug.WriteLine(ex);
-                    return false;
-                }
-                
-            }else
-            {
-                try
-                {
-                    var msg = await singleton.ReceiveMessage();
-                    if(msg == "hello")
-                    {
-                        Debug.WriteLine(msg);
-
-                        await singleton.SendMessage("ok");
-
-                    }
-                    return true;
-                }catch (Exception ex)
-                {
-                    Debug.WriteLine(ex);
-                    return false;
-                }
-            }
-
-            /*HandShake handInfo = (HandShake?) await Receive();
-
-            if (verifyIdentity(handInfo.ip))
-            {
-
-            }*//*
-
-            // hand shake
-            HandShake response = (HandShake?) await singleton.Receive();
-
-            if (response.ok_code)
-            {
-                Encryptor.Nonce = handShake.nonce;
-                Encryptor.Key = handShake.key;
-                return await ReceiveMessage();
-            }
-            else
-            {
-                return false;
-            }*/
+            currentStep = 0;
+            return (isListner) ? await HandShakeListner() : await HandShakeClient();
         }
+
+        async private Task<bool> HandShakeListner()
+        {
+            while (currentStep < HANDSHAKECOUNT)
+            {
+                switch (currentStep)
+                {
+                    case 0: // Send Helo
+                    {
+                        bool bRetValue = await InternalSendStringAsync("Helo");
+                        if (bRetValue == false) 
+                        {
+                            return false;
+                        }
+                        // Next step
+                        ++currentStep;
+                        break;
+                    }
+                    case 1: // Wait for OK
+                    {
+                        byte[] buffer = await InternalReceiveAsync();
+                        if (BitConverter.ToString(buffer) != "OK")
+                        {
+                            return false;
+                        }
+                        // Next step
+                        ++currentStep;
+                        break;
+                    }
+                    case 3: // Envoi du nonce
+                    {
+                        // Next step
+                        ++currentStep;
+                        break;
+                    }
+                }
+
+            }
+            /*
+            try
+            {
+                HandShake handShake = new HandShake(MY_IP_ADRESSE, Encryptor.GenNonce, Encryptor.Key, false);
+                await singleton.SendMessage("hello");
+
+                var resp = await singleton.ReceiveMessage();
+                Debug.WriteLine(resp);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return false;
+            }
+            */
+            // Done
+            return true;
+        }
+        async private Task<bool> HandShakeClient()
+        {
+            try
+            {
+                var msg = await singleton.ReceiveMessage();
+                if (msg == "hello")
+                {
+                    Debug.WriteLine(msg);
+
+                    await singleton.SendMessage("ok");
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return false;
+            }
+            return true;
+        }
+
 
         public async Task<bool> SendMessage(string message)
         {
@@ -180,6 +206,47 @@ namespace chatP2P
         {
             
         }*/
+
+
+        private async Task<byte[]> InternalReceiveAsync()
+        {
+            byte[] buffer = new byte[1024];
+            try
+            {
+                await using NetworkStream stream = client.GetStream();
+                int received = stream.Read(buffer);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("InternalReceiveAsync  - Exception:"+ex.Message);
+            }
+            return buffer;
+        }
+
+        private async Task<bool> InternalSendStringAsync(string msg)
+        {
+            return await InternalSendAsync(Encoding.UTF8.GetBytes(msg));
+        }
+
+        private async Task<bool> InternalSendAsync(byte[] buffer)
+        {
+            try
+            {
+                Debug.WriteLine("SendMessage {0}", BitConverter.ToString(buffer));
+                await using NetworkStream stream = client.GetStream();
+                await stream.WriteAsync(buffer);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("InternalReceiveAsync  - Exception:" + ex.Message);
+                return false;
+            }
+            // Done
+            return true;
+        }
+    }
+
+
         public async Task<object> Receive()
         {
             while (true)
