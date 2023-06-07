@@ -13,6 +13,7 @@ using System.Diagnostics;
 using encryptingArariba;
 using Microsoft.VisualBasic;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Configuration;
 
 namespace chatP2P
 {
@@ -85,6 +86,12 @@ namespace chatP2P
         public async Task<bool> Connect(string ipAdress, int port)
         {
             IPEndPoint ipEndPoint = new(IPAddress.Parse(ipAdress), port);
+            return isListner ? await ConnectAsListner() : await ConnectAsClient(ipEndPoint);
+        }
+
+        public async Task<bool> Connect()
+        {
+            IPEndPoint ipEndPoint = null;
             return isListner ? await ConnectAsListner() : await ConnectAsClient(ipEndPoint);
         }
 
