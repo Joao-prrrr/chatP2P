@@ -119,8 +119,13 @@ namespace chatP2P
                 try
                 {
                     var msg = await singleton.ReceiveMessage();
-                    Debug.WriteLine(msg);
-                    singleton.SendMessage("ok");
+                    if(msg == "hello")
+                    {
+                        Debug.WriteLine(msg);
+
+                        singleton.SendMessage("ok");
+
+                    }
                     return true;
                 }catch (Exception ex)
                 {
@@ -220,10 +225,7 @@ namespace chatP2P
                     try
                     {
 
-                        listener.Start();
-
-                        using TcpClient handler = await listener.AcceptTcpClientAsync();
-                        await using NetworkStream stream = handler.GetStream();
+                        await using NetworkStream stream = client.GetStream();
 
                         //var message = $"📅 {DateTime.Now} 🕛";
                         // var dateTimeBytes = Encoding.UTF8.GetBytes(message);
@@ -241,7 +243,7 @@ namespace chatP2P
                     }
                     catch
                     {
-                        listener.Stop();
+                        
                     }
                 }
             }
