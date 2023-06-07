@@ -54,7 +54,7 @@ namespace chatP2P
         /// </summary>
         /// <returns></returns>
         private async Task<bool> ConnectAsListner()
-
+<<<<<<< HEAD
         {
             listener.Start();
             while (true)
@@ -72,7 +72,10 @@ namespace chatP2P
                     Debug.WriteLine(ex.Message);
                 }
             }
+=======
+        { 
 
+>>>>>>> 5b3ded4aed55083ee728d29b48d0a1cdebc375b7
         }
         private async Task<bool> ConnectAsClient()
         {
@@ -148,12 +151,9 @@ namespace chatP2P
             {
                 try
                 {
-                    Debug.WriteLine("SendMessage {0}", message);
                     await using NetworkStream stream = client.GetStream();
-
-                   // var buffer = Encryptor.EncryptString(message);
-                    var buffer = ObjectToByteArray(message);
-                    await stream.WriteAsync(buffer);
+                    var bytesMsg = ObjectToByteArray(message);
+                    await stream.WriteAsync(bytesMsg);
                     break;
                 }
                 catch { }

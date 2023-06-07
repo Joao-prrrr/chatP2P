@@ -72,6 +72,7 @@ namespace chatP2P
                     Debug.WriteLine(ex.Message);
                 }
             }
+        { 
 
         }
         private async Task<bool> ConnectAsClient()
