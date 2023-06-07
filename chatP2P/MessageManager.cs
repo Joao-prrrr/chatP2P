@@ -103,7 +103,7 @@ namespace chatP2P
                 try
                 {
                     HandShake handShake = new HandShake(MY_IP_ADRESSE, Encryptor.GenNonce, Encryptor.Key, false);
-                    singleton.SendMessage("hello");
+                    await singleton.SendMessage("hello");
                     
                     var resp = await singleton.ReceiveMessage();
                     Debug.WriteLine(resp);
@@ -123,7 +123,7 @@ namespace chatP2P
                     {
                         Debug.WriteLine(msg);
 
-                        singleton.SendMessage("ok");
+                        await singleton.SendMessage("ok");
 
                     }
                     return true;
@@ -156,7 +156,7 @@ namespace chatP2P
             }*/
         }
 
-        public async void SendMessage(string message)
+        public async Task<bool> SendMessage(string message)
         {
             while (true)
             {
@@ -168,9 +168,11 @@ namespace chatP2P
                    // var buffer = Encryptor.EncryptString(message);
                     var buffer = ObjectToByteArray(message);
                     await stream.WriteAsync(buffer);
-                    break;
+                    return true;
                 }
-                catch { }
+                catch {
+                    return false;
+                }
             }
         }
 
