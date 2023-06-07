@@ -27,7 +27,7 @@ namespace chatP2P
 
         private async void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            if (instance.verifConnection().Result)
+            if (/*instance.verifConnection().Result*/ true)
             {
                 lblConnect.ForeColor = Color.Green;
                 string txt = "Connected";
@@ -35,7 +35,7 @@ namespace chatP2P
                     lblConnect.Text = txt;
                 });
 
-                var msg = await instance.ReceiveMsg();
+                //var msg = await instance.Receive();
 
                 Font msgFont = new Font("Arial", 9, FontStyle.Bold);
                 richTextBox1.SelectionFont = msgFont;
@@ -85,7 +85,8 @@ namespace chatP2P
 
             textBox1.Text = "";
 
-            /*instance.SendMessage(textBox1.Text);*/
+            instance.DefineAsClient();
+            await instance.Connect();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
