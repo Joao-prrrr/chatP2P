@@ -21,7 +21,6 @@ namespace chatP2P
         const string MY_IP_ADRESSE = "10.5.53.39";
         static private string IP_ADDRESS = "10.5.43.52";
         static private int PORT = 13;
-        static private IPEndPoint ipEndPoint = new(IPAddress.Parse(IP_ADDRESS), PORT);
 
         static private MessageManager singleton = null;
         private TcpClient client = null;
@@ -74,7 +73,7 @@ namespace chatP2P
             }
 
         }
-        private async Task<bool> ConnectAsClient()
+        private async Task<bool> ConnectAsClient(IPEndPoint ipEndPoint)
         {
             client = new TcpClient();
             await client.ConnectAsync(ipEndPoint);
@@ -83,9 +82,10 @@ namespace chatP2P
             return await singleton.HandShake();
         }
 
-        public async Task<bool> Connect()
+        public async Task<bool> Connect(string ipAdress, int port)
         {
-            return isListner ? await ConnectAsListner() : await ConnectAsClient();
+            IPEndPoint ipEndPoint = new(IPAddress.Parse(ipAdress), port);
+            return isListner ? await ConnectAsListner() : await ConnectAsClient(ipEndPoint);
         }
 
         async private Task<bool> HandShake()
