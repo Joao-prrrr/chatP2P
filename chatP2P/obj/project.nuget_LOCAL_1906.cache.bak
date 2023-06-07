@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "TSwXgUbHFMlGEl6o4YNWnbMeHota7+ofitFilPJbhwuNTndBPAW7fJprWH7MWIMze9UT5rlwt6cAPe5xkd2mBw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Joao Araribá\\Desktop\\CFPT-Informatique-2eme\\M114\\chatP2P\\chatP2P\\chatP2P.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Joao Araribá\\.nuget\\packages\\libsodium\\1.0.18.4\\libsodium.1.0.18.4.nupkg.sha512",
+    "C:\\Users\\Joao Araribá\\.nuget\\packages\\sodium.core\\1.3.3\\sodium.core.1.3.3.nupkg.sha512"
+  ],
+  "logs": []
+}
