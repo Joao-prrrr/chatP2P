@@ -90,7 +90,7 @@ namespace chatP2P
                 {
                     var msg = await singleton.ReceiveMessage();
                     Debug.WriteLine(msg);
-                    await singleton.SendMessage("ok");
+                    singleton.SendMessage("ok");
                     return true;
                 }catch (Exception ex)
                 {
