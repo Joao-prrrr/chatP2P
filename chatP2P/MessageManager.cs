@@ -59,7 +59,7 @@ namespace chatP2P
             await client.ConnectAsync(ipEndPoint);
             //await using NetworkStream stream = client.GetStream();
             
-            return singleton.HandShake();
+            return await singleton.HandShake();
         }
 
         public async Task<bool> Connect()
@@ -67,7 +67,7 @@ namespace chatP2P
             return isListner ? await ConnectAsListner() : await ConnectAsClient();
         }
 
-        async private bool HandShake()
+        async private Task<bool> HandShake()
         {
             if(isListner)
             {
