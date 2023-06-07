@@ -70,6 +70,8 @@ namespace chatP2P
 
         private async void mainChat_Shown(object sender, EventArgs e)
         {
+            instance.DefineAsListner();
+            instance.Connect();
             /*//MessageManager.Connect();
             MessageManager instance = MessageManager.GetInstance();
             //instance.SendMessage("ma bite");
