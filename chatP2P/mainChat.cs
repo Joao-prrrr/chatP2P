@@ -17,6 +17,7 @@ namespace chatP2P
         {
             InitializeComponent();
             btnSend.Enabled = false;
+            textBox1.Enabled = false;
 
             System.Timers.Timer timer = new System.Timers.Timer();
             timer.Interval = 1000;
@@ -41,7 +42,13 @@ namespace chatP2P
                 richTextBox1.SelectionColor = Color.Red;
                 richTextBox1.SelectedText = Environment.NewLine + "Other :  " + textBox1.Text;
 
-                btnSend.Enabled = true;
+                textBox1.Invoke((MethodInvoker)delegate {
+                    textBox1.Enabled = true;
+                });
+
+                btnSend.Invoke((MethodInvoker)delegate {
+                    btnSend.Enabled = true;
+                });
             }
             else
             {
@@ -51,7 +58,13 @@ namespace chatP2P
                     lblConnect.Text = txt;
                 });
 
-                btnSend.Enabled = false;
+                textBox1.Invoke((MethodInvoker)delegate { 
+                    textBox1.Enabled = false;
+                });
+
+                btnSend.Invoke((MethodInvoker)delegate {
+                    btnSend.Enabled = false;
+                });
             }
         }
 
