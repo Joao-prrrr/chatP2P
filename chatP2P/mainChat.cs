@@ -38,7 +38,7 @@ namespace chatP2P
                 //var msg = await instance.Receive();
 
                 Font msgFont = new Font("Arial", 9, FontStyle.Bold);
-                richTextBox1.SelectionFont = msgFont;
+                /*richTextBox1.SelectionFont = msgFont;
                 richTextBox1.SelectionColor = Color.Red;
                 richTextBox1.SelectedText = Environment.NewLine + "Other :  " + textBox1.Text;
 
@@ -48,7 +48,7 @@ namespace chatP2P
 
                 btnSend.Invoke((MethodInvoker)delegate {
                     btnSend.Enabled = true;
-                });
+                });*/
             }
             else
             {
@@ -70,6 +70,13 @@ namespace chatP2P
 
         private async void mainChat_Shown(object sender, EventArgs e)
         {
+            instance.DefineAsListner();
+
+            bool connected = false;
+            while(!connected)
+            {
+                connected = await instance.Connect();
+            }
             /*//MessageManager.Connect();
             MessageManager instance = MessageManager.GetInstance();
             //instance.SendMessage("ma bite");
@@ -85,8 +92,7 @@ namespace chatP2P
 
             textBox1.Text = "";
 
-            instance.DefineAsClient();
-            await instance.Connect();
+            
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)

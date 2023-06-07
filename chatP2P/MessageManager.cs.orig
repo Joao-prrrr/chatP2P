@@ -34,10 +34,9 @@ namespace chatP2P
 
         private MessageManager()
         {
-            client = new TcpClient();
             listener = new(new IPEndPoint(IPAddress.Any, PORT));
 
-            Connect();
+            /*Connect();*/
 
         }
 
@@ -50,45 +49,88 @@ namespace chatP2P
             return singleton;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         private async Task<bool> ConnectAsListner()
+<<<<<<< HEAD
+        {
+            listener.Start();
+            while (true)
+            {
+                try
+                {
+                    client = await listener.AcceptTcpClientAsync();
+                    Debug.WriteLine(client);
+                    await using NetworkStream stream = client.GetStream();
+                    Debug.WriteLine(stream);
+                    return true;
+                }
+                catch(Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
+            }
+=======
         { 
+
+>>>>>>> 5b3ded4aed55083ee728d29b48d0a1cdebc375b7
         }
         private async Task<bool> ConnectAsClient()
         {
-
+            client = new TcpClient();
+            await client.ConnectAsync(ipEndPoint);
+            //await using NetworkStream stream = client.GetStream();
+            
+            return await singleton.HandShake();
         }
 
         public async Task<bool> Connect()
         {
-            return isListner ? ConnectAsListner() : ConnectAsClient();
-            bool rep = false;
-            while (!rep)
+            return isListner ? await ConnectAsListner() : await ConnectAsClient();
+        }
+
+        async private Task<bool> HandShake()
+        {
+            if(isListner)
             {
                 try
                 {
-                    await client.ConnectAsync(ipEndPoint);
-                    rep = true;
-                }
-                catch
+                    HandShake handShake = new HandShake(MY_IP_ADRESSE, Encryptor.GenNonce, Encryptor.Key, false);
+                    singleton.SendMessage("hello");
+                    var resp = await singleton.ReceiveMessage();
+                    Debug.WriteLine(resp);
+                    return true;
+                }catch(Exception ex)
                 {
+                    Debug.WriteLine(ex);
+                    return false;
                 }
-
+                
+            }else
+            {
+                try
+                {
+                    var msg = await singleton.ReceiveMessage();
+                    Debug.WriteLine(msg);
+                    singleton.SendMessage("ok");
+                    return true;
+                }catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    return false;
+                }
             }
-        }
 
-<<<<<<< HEAD
-        private bool HandShake()
-        {
-            HandShake handInfo = (HandShake?) await Receive();
+            /*HandShake handInfo = (HandShake?) await Receive();
 
             if (verifyIdentity(handInfo.ip))
             {
 
-            }
+            }*//*
 
             // hand shake
-            HandShake handShake = new HandShake(MY_IP_ADRESSE, Encryptor.GenNonce, Encryptor.Key, false);
-            singleton.Send(handShake);
             HandShake response = (HandShake?) await singleton.Receive();
 
             if (response.ok_code)
@@ -100,34 +142,28 @@ namespace chatP2P
             else
             {
                 return false;
-            }
+            }*/
         }
 
         public async void SendMessage(string message)
-=======
-        public async Task SendMessage(string message)
->>>>>>> 83a14b5d4d49d868f9b476187c389fa58415b60a
         {
             while (true)
             {
                 try
                 {
-                    Debug.WriteLine("SendMessage {0}", message);
                     await using NetworkStream stream = client.GetStream();
-
-                   // var buffer = Encryptor.EncryptString(message);
-                    var buffer = ObjectToByteArray(message);
-                    await stream.WriteAsync(buffer);
+                    var bytesMsg = ObjectToByteArray(message);
+                    await stream.WriteAsync(bytesMsg);
                     break;
                 }
                 catch { }
             }
         }
 
-        public async Task<string> GetMessage()
+        /*public async Task<string> GetMessage()
         {
             
-        }
+        }*/
         public async Task<object> Receive()
         {
             while (true)
@@ -165,7 +201,6 @@ namespace chatP2P
             }
         }
 
-<<<<<<< HEAD
         public async Task<string> ReceiveMessage()
         {
             while (true)
@@ -229,18 +264,6 @@ namespace chatP2P
                 memStream.Seek(0, SeekOrigin.Begin);
                 var obj = binForm.Deserialize(memStream);
                 return obj;
-=======
-        public async Task<bool> verifConnection()
-        {
-            try
-            {
-                await client.ConnectAsync(ipEndPoint);
-                return true;
-            }
-            catch
-            {
-                return false;
->>>>>>> 83a14b5d4d49d868f9b476187c389fa58415b60a
             }
         }
     }
