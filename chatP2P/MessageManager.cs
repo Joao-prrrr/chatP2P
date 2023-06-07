@@ -44,7 +44,7 @@ namespace chatP2P
 
         public static MessageManager GetInstance()
         {
-            if(singleton == null)
+            if (singleton == null)
             {
                 singleton = new MessageManager();
             }
@@ -70,7 +70,7 @@ namespace chatP2P
                     Debug.WriteLine(done);
                     return done;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Debug.WriteLine(ex.Message);
                 }
@@ -82,7 +82,7 @@ namespace chatP2P
             client = new TcpClient();
             await client.ConnectAsync(ipEndPoint);
             //await using NetworkStream stream = client.GetStream();
-            
+
             return await singleton.HandShake();
         }
 
@@ -111,33 +111,33 @@ namespace chatP2P
                 switch (currentStep)
                 {
                     case 0: // Send Helo
-                    {
-                        bool bRetValue = await InternalSendStringAsync("Helo");
-                        if (bRetValue == false) 
                         {
-                            return false;
+                            bool bRetValue = await InternalSendStringAsync("Helo");
+                            if (bRetValue == false)
+                            {
+                                return false;
+                            }
+                            // Next step
+                            ++currentStep;
+                            break;
                         }
-                        // Next step
-                        ++currentStep;
-                        break;
-                    }
                     case 1: // Wait for OK
-                    {
-                        byte[] buffer = await InternalReceiveAsync();
-                        if (BitConverter.ToString(buffer) != "OK")
                         {
-                            return false;
+                            byte[] buffer = await InternalReceiveAsync();
+                            if (BitConverter.ToString(buffer) != "OK")
+                            {
+                                return false;
+                            }
+                            // Next step
+                            ++currentStep;
+                            break;
                         }
-                        // Next step
-                        ++currentStep;
-                        break;
-                    }
                     case 3: // Envoi du nonce
-                    {
-                        // Next step
-                        ++currentStep;
-                        break;
-                    }
+                        {
+                            // Next step
+                            ++currentStep;
+                            break;
+                        }
                 }
 
             }
@@ -162,51 +162,35 @@ namespace chatP2P
         }
         async private Task<bool> HandShakeClient()
         {
-            try
+            while (currentStep < HANDSHAKECOUNT)
             {
-                var msg = await singleton.ReceiveMessage();
-                if (msg == "hello")
+                switch (currentStep)
                 {
-                    Debug.WriteLine(msg);
-
-                    await singleton.SendMessage("ok");
-
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                return false;
-            }
-            return true;
-        }
-
-
-        public async Task<bool> SendMessage(string message)
-        {
-            while (true)
-            {
-                try
-                {
-                    Debug.WriteLine("SendMessage {0}", message);
-                    await using NetworkStream stream = client.GetStream();
-
-                   // var buffer = Encryptor.EncryptString(message);
-                    var buffer = ObjectToByteArray(message);
-                    await stream.WriteAsync(buffer);
-                    return true;
-                }
-                catch {
-                    return false;
+                    case 0: // Send Helo
+                        {
+                            byte[] buffer = await InternalReceiveAsync();
+                            if (BitConverter.ToString(buffer) != "Helo")
+                            {
+                                return false;
+                            }
+                            // Next step
+                            ++currentStep;
+                            break;
+                        }
+                    case 1: // Wait for OK
+                        {
+                            bool bRetValue = await InternalSendStringAsync("OK");
+                            if (bRetValue == false)
+                            {
+                                return false;
+                            }
+                            // Next step
+                            ++currentStep;
+                            break; 
+                        }
                 }
             }
         }
-
-        /*public async Task<string> GetMessage()
-        {
-            
-        }*/
-
 
         private async Task<byte[]> InternalReceiveAsync()
         {
@@ -218,7 +202,7 @@ namespace chatP2P
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("InternalReceiveAsync  - Exception:"+ex.Message);
+                Debug.WriteLine("InternalReceiveAsync  - Exception:" + ex.Message);
             }
             return buffer;
         }
@@ -243,84 +227,6 @@ namespace chatP2P
             }
             // Done
             return true;
-        }
-    }
-
-
-        public async Task<object> Receive()
-        {
-            while (true)
-            {
-                bool rep = false;
-                while (!rep)
-                {
-                    try
-                    {
-
-                        listener.Start();
-
-                        using TcpClient handler = await listener.AcceptTcpClientAsync();
-                        await using NetworkStream stream = handler.GetStream();
-
-                        //var message = $"📅 {DateTime.Now} 🕛";
-                        // var dateTimeBytes = Encoding.UTF8.GetBytes(message);
-                        // await stream.WriteAsync(dateTimeBytes);
-
-                        byte[] buffer = new byte[1024];
-
-                        var received = stream.Read(buffer);
-                        var message = Encoding.UTF8.GetString(buffer.AsSpan(0, received));
-                        // Sample output:
-                        //     Sent message: "📅 8/22/2022 9:07:17 AM 🕛"
-                        rep = true;
-                        //return Encryptor.DecryptString(buffer.AsSpan(0, received).ToArray());
-                        return ByteArrayToObject(buffer.AsSpan(0, received).ToArray());
-                    }
-                    catch
-                    {
-                        listener.Stop();
-                    }
-                }
-            }
-        }
-
-        public async Task<string> ReceiveMessage()
-        {
-            while (true)
-            {
-                bool rep = false;
-                while (!rep)
-                {
-                    try
-                    {
-
-                        await using NetworkStream stream = client.GetStream();
-
-                        //var message = $"📅 {DateTime.Now} 🕛";
-                        // var dateTimeBytes = Encoding.UTF8.GetBytes(message);
-                        // await stream.WriteAsync(dateTimeBytes);
-
-                        byte[] buffer = new byte[1024];
-
-                        var received = stream.Read(buffer);
-                        var message = Encoding.UTF8.GetString(buffer.AsSpan(0, received));
-                        // Sample output:
-                        //     Sent message: "📅 8/22/2022 9:07:17 AM 🕛"
-                        rep = true;
-                        //return Encryptor.DecryptString(buffer.AsSpan(0, received).ToArray());
-                        return Encryptor.DecryptString(buffer.AsSpan(0, received).ToArray());
-                    }
-                    catch
-                    {
-                        
-                    }
-                }
-            }
-        }
-
-        private bool verifyIdentity(string ip)
-        {
-            return ip == IP_ADDRESS;
         }
 
         // Convert an object to a byte array
