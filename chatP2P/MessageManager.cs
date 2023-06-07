@@ -190,6 +190,7 @@ namespace chatP2P
                         }
                 }
             }
+            return true;
         }
 
         private async Task<byte[]> InternalReceiveAsync()
