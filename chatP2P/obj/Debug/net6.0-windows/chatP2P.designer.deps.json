@@ -6,69 +6,10 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v6.0": {
-      "libsodium/1.0.18.4": {
-        "runtimeTargets": {
-          "runtimes/linux-arm/native/libsodium.so": {
-            "rid": "linux-arm",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/linux-arm64/native/libsodium.so": {
-            "rid": "linux-arm64",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/linux-musl-arm/native/libsodium.so": {
-            "rid": "linux-musl-arm",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/linux-musl-arm64/native/libsodium.so": {
-            "rid": "linux-musl-arm64",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/linux-musl-x64/native/libsodium.so": {
-            "rid": "linux-musl-x64",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/linux-x64/native/libsodium.so": {
-            "rid": "linux-x64",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/osx-arm64/native/libsodium.dylib": {
-            "rid": "osx-arm64",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/osx-x64/native/libsodium.dylib": {
-            "rid": "osx-x64",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/win-x64/native/libsodium.dll": {
-            "rid": "win-x64",
-            "assetType": "native",
-            "fileVersion": "1.0.18.0"
-          },
-          "runtimes/win-x86/native/libsodium.dll": {
-            "rid": "win-x86",
-            "assetType": "native",
-            "fileVersion": "1.0.18.0"
-          }
-        }
-      },
+      "libsodium/1.0.18.4": {},
       "Sodium.Core/1.3.3": {
         "dependencies": {
           "libsodium": "1.0.18.4"
-        },
-        "runtime": {
-          "lib/netstandard2.1/Sodium.Core.dll": {
-            "assemblyVersion": "1.3.3.0",
-            "fileVersion": "1.3.3.0"
-          }
         }
       }
     }

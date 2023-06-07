@@ -34,10 +34,9 @@ namespace chatP2P
 
         private MessageManager()
         {
-            client = new TcpClient();
             listener = new(new IPEndPoint(IPAddress.Any, PORT));
 
-            Connect();
+            /*Connect();*/
 
         }
 
@@ -52,42 +51,62 @@ namespace chatP2P
 
         private async Task<bool> ConnectAsListner()
         { 
+
         }
         private async Task<bool> ConnectAsClient()
         {
-
+            client = new TcpClient();
+            await client.ConnectAsync(ipEndPoint);
+            //await using NetworkStream stream = client.GetStream();
+            
+            return singleton.HandShake();
         }
 
         public async Task<bool> Connect()
         {
-            return isListner ? ConnectAsListner() : ConnectAsClient();
-            bool rep = false;
-            while (!rep)
+            return isListner ? await ConnectAsListner() : await ConnectAsClient();
+        }
+
+        async private bool HandShake()
+        {
+            if(isListner)
             {
                 try
                 {
-                    await client.ConnectAsync(ipEndPoint);
-                    rep = true;
-                }
-                catch
+                    HandShake handShake = new HandShake(MY_IP_ADRESSE, Encryptor.GenNonce, Encryptor.Key, false);
+                    await singleton.SendMessage("hello");
+                    var resp = await singleton.ReceiveMessage();
+                    Debug.WriteLine(resp);
+                    return true;
+                }catch(Exception ex)
                 {
+                    Debug.WriteLine(ex);
+                    return false;
                 }
-
+                
+            }else
+            {
+                try
+                {
+                    var msg = await singleton.ReceiveMessage();
+                    Debug.WriteLine(msg);
+                    await singleton.SendMessage("ok");
+                    return true;
+                }catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    return false;
+                }
             }
-        }
 
-        private bool HandShake()
-        {
-            HandShake handInfo = (HandShake?) await Receive();
+            /*HandShake handInfo = (HandShake?) await Receive();
 
             if (verifyIdentity(handInfo.ip))
             {
 
-            }
+            }*//*
 
             // hand shake
-            HandShake handShake = new HandShake(MY_IP_ADRESSE, Encryptor.GenNonce, Encryptor.Key, false);
-            singleton.Send(handShake);
             HandShake response = (HandShake?) await singleton.Receive();
 
             if (response.ok_code)
@@ -99,7 +118,7 @@ namespace chatP2P
             else
             {
                 return false;
-            }
+            }*/
         }
 
         public async void SendMessage(string message)
@@ -120,10 +139,10 @@ namespace chatP2P
             }
         }
 
-        public async Task<string> GetMessage()
+        /*public async Task<string> GetMessage()
         {
             
-        }
+        }*/
         public async Task<object> Receive()
         {
             while (true)
