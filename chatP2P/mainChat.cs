@@ -31,7 +31,8 @@ namespace chatP2P
             {
                 lblConnect.ForeColor = Color.Green;
                 string txt = "Connected";
-                lblConnect.Invoke((MethodInvoker)delegate {
+                lblConnect.Invoke((MethodInvoker)delegate
+                {
                     lblConnect.Text = txt;
                 });
 
@@ -54,15 +55,18 @@ namespace chatP2P
             {
                 lblConnect.ForeColor = Color.Red;
                 string txt = "Disonnected - Unable to communicate with";
-                lblConnect.Invoke((MethodInvoker)delegate {
+                lblConnect.Invoke((MethodInvoker)delegate
+                {
                     lblConnect.Text = txt;
                 });
 
-                textBox1.Invoke((MethodInvoker)delegate { 
+                textBox1.Invoke((MethodInvoker)delegate
+                {
                     textBox1.Enabled = false;
                 });
 
-                btnSend.Invoke((MethodInvoker)delegate {
+                btnSend.Invoke((MethodInvoker)delegate
+                {
                     btnSend.Enabled = false;
                 });
             }
@@ -73,7 +77,7 @@ namespace chatP2P
             instance.DefineAsListner();
 
             bool connected = false;
-            while(!connected)
+            while (!connected)
             {
                 connected = await instance.Connect();
             }
@@ -92,7 +96,7 @@ namespace chatP2P
 
             textBox1.Text = "";
 
-            
+
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -105,6 +109,12 @@ namespace chatP2P
             {
                 btnSend.Enabled = true;
             }
+        }
+
+        private async void btnConnect_Click(object sender, EventArgs e)
+        {
+            instance.DefineAsClient();
+            await instance.Connect();
         }
     }
 }

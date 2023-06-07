@@ -96,6 +96,7 @@ namespace chatP2P
                 {
                     HandShake handShake = new HandShake(MY_IP_ADRESSE, Encryptor.GenNonce, Encryptor.Key, false);
                     singleton.SendMessage("hello");
+                    
                     var resp = await singleton.ReceiveMessage();
                     Debug.WriteLine(resp);
                     return true;
