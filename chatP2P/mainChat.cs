@@ -114,7 +114,11 @@ namespace chatP2P
         private async void btnConnect_Click(object sender, EventArgs e)
         {
             instance.DefineAsClient();
-            await instance.Connect();
+
+            string ip = txtIP.Text;
+            int port = 13;
+
+            await instance.Connect(ip, port);
         }
     }
 }
